@@ -15,7 +15,7 @@ class Crate
 {
 public:
 	//Properties
-	CDTimerClass CrateTimer;
+	TimerStruct CrateTimer;
 	CellStruct Location;
 };
 

@@ -53,9 +53,6 @@ public:
 	virtual SHPStruct* LoadBuildup() R0;
 
 	//non-virtual
-	void ClearBuildUp()
-		{ JMP_THIS(0x465AF0); }
-
 	bool IsVehicle() const
 		{ JMP_THIS(0x465D40); }
 
@@ -150,7 +147,7 @@ public:
 	int PowerDrain;
 	int ExtraPowerBonus;
 	int ExtraPowerDrain;
-	Foundation Foundation;
+	eFoundation Foundation;
 	int Height;
 	int OccupyHeight;
 	int MidPoint;

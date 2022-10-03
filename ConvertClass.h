@@ -13,7 +13,6 @@
 #include <FileFormats/SHP.h>
 #include <Helpers/CompileTime.h>
 
-class RGBClass;
 struct ColorStruct;
 class DSurface;
 
@@ -65,7 +64,7 @@ public:
 	int BytesPerPixel;
 	BlitterCore* Blitters[50];
 	RLEBlitterCore* RLEBlitters[39];
-	int ShadeCount;
+	size_t ShadeCount;
 	void* BufferA; // new(ShadeCount * 8 * BytesPerPixel) - gets filled with palette values on CTOR
 	void* Midpoint; // points to the middle of BufferA above, ??
 	void* BufferB; // if(BytesPerPixel == 1) { BufferB = new byte[0x100]; }
@@ -114,10 +113,10 @@ public:
 	//===========================================================================
 	//===== Properties ==========================================================
 	//===========================================================================
-	RGBClass* UsedPalette1;
-	RGBClass* UsedPalette2;
+	BytePalette const* UsedPalette1;
+	BytePalette const* UsedPalette2;
 	BYTE* IndexesToIgnore;
-	int RefCount;
+	int UsageCount;
 	TintStruct Color1;
 	TintStruct Color2;
 	bool Tinted;

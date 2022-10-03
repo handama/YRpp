@@ -121,7 +121,7 @@ public:
 	//VTable
 	virtual HRESULT __stdcall Load(IStream* pStm) R0;
 	virtual HRESULT __stdcall Save(IStream* pStm) R0;
-	virtual void ComputeCRC(CRCEngine& crc) const RX;
+	virtual void CalculateChecksum(Checksummer& checksum) const RX;
 
 	//virtual ~BaseClass() { /*???*/ }; // gcc demands a virtual since virtual funcs exist
 
@@ -148,7 +148,7 @@ struct DropshipStruct
 	DropshipStruct() JMP_THIS(0x4B69B0);
 	~DropshipStruct() JMP_THIS(0x4B69D0);
 
-	DECLARE_PROPERTY(CDTimerClass, Timer);
+	DECLARE_PROPERTY(TimerStruct, Timer);
 	BYTE             unknown_C;
 	PROTECTED_PROPERTY(BYTE, align_D[3]);
 	int              Count;
@@ -168,8 +168,8 @@ public:
 	//Static
 	static constexpr constant_ptr<DynamicVectorClass<HouseClass*>, 0xA80228u> const Array{};
 
-	static constexpr reference<HouseClass*, 0xA83D4Cu> const CurrentPlayer{}; // House of player at this computer.
-	static constexpr reference<HouseClass*, 0xAC1198u> const Observer{};;     // House of player that is observer.
+	static constexpr reference<HouseClass*, 0xA83D4Cu> const Player{};
+	static constexpr reference<HouseClass*, 0xAC1198u> const Observer{};;
 
 	//IConnectionPointContainer
 	virtual HRESULT __stdcall EnumConnectionPoints(IEnumConnectionPoints** ppEnum) R0;
@@ -360,24 +360,6 @@ public:
 	static signed int __fastcall FindIndexByName(const char *name)
 		{ JMP_STD(0x50C170); }
 
-	static int __fastcall GetPlayerAtFromString(const char* name)
-		{ JMP_STD(0x510FB0); }
-	static bool __fastcall IsPlayerAtType(int at)
-	{
-		// JMP_STD(0x510F60);
-		return
-			at == PlayerAtA ||
-			at == PlayerAtB ||
-			at == PlayerAtC ||
-			at == PlayerAtD ||
-			at == PlayerAtE ||
-			at == PlayerAtF ||
-			at == PlayerAtG
-			;
-	}
-	static HouseClass* __fastcall FindByPlayerAt(int at)
-		{ JMP_STD(0x510ED0); }
-
 	// gets the first house of a type with this name
 	static HouseClass* FindByCountryName(const char* name) {
 		auto idx = HouseTypeClass::FindIndexOfName(name);
@@ -445,21 +427,21 @@ public:
 	bool AllPrerequisitesAvailable(TechnoTypeClass const* pItem, DynamicVectorClass<BuildingTypeClass*> const& vectorBuildings, int vectorLength)
 		{ JMP_THIS(0x505360); }
 
-	// Whether any human player controls this house.
-	bool IsControlledByHuman() const { // { JMP_THIS(0x50B730); }
-		bool result = this->IsHumanPlayer;
+	// whether any human player controls this house
+	bool ControlledByHuman() const { // { JMP_THIS(0x50B730); }
+		bool result = this->CurrentPlayer;
 		if(SessionClass::Instance->GameMode == GameMode::Campaign) {
-			result = result || this->IsInPlayerControl;
+			result = result || this->PlayerControl;
 		}
 		return result;
 	}
 
-	// Whether the human player on this computer can control this house.
-	bool IsControlledByCurrentPlayer() const { // { JMP_THIS(0x50B6F0); }
+	// whether the human player on this PC can control this house
+	bool ControlledByPlayer() const { // { JMP_THIS(0x50B6F0); }
 		if(SessionClass::Instance->GameMode != GameMode::Campaign) {
-			return this->IsCurrentPlayer();
+			return this->IsPlayer();
 		}
-		return this->IsHumanPlayer || this->IsInPlayerControl;
+		return this->CurrentPlayer || this->PlayerControl;
 	}
 
 	// Target ought to be Object, I imagine, but cell doesn't work then
@@ -681,19 +663,22 @@ public:
 		return this->Type->MultiplayPassive;
 	}
 
-	// Whether this house is equal to CurrentPlayer
-	bool IsCurrentPlayer() const {
-		return this == CurrentPlayer;
+	// whether this house is equal to Player
+	bool IsPlayer() const {
+		return this == Player;
 	}
 
-	// Whether this house is equal to Observer
+	bool IsPlayerControl() const
+		{ JMP_THIS(0x50B730); }
+
+	// whether this house is equal to Observer
 	bool IsObserver() const {
 		return this == Observer;
 	}
 
-	// Whether CurrentPlayer is equal to Observer
-	static bool IsCurrentPlayerObserver() {
-		return CurrentPlayer && CurrentPlayer->IsObserver();
+	// whether Player is equal to Observer
+	static bool IsPlayerObserver() {
+		return Player && Player->IsObserver();
 	}
 
 	int CalculateCostMultipliers()
@@ -755,9 +740,9 @@ public:
 	Edge                  StartingEdge;
 	DWORD                 AIState_1E4;
 	int                   SideIndex;
-	bool                  IsHumanPlayer;		// Is controlled by a human player.
-	bool                  IsInPlayerControl;	// Is controlled by current player.
-	bool                  Production;		    // AI production has begun.
+	bool                  CurrentPlayer;		//is controlled by the player at this computer
+	bool                  PlayerControl;		//a human controls this House
+	bool                  Production;		//AI production has begun
 	bool                  AutocreateAllowed;
 	bool			      NodeLogic_1F0;
 	bool			      ShipYardConst_1F1;
@@ -797,11 +782,11 @@ public:
 	int                   LastBuiltAircraftType;
 	int                   LastBuiltVehicleType;
 	int                   AllowWinBlocks; // some ra1 residue map trigger-fu, should die a painful death
-	DECLARE_PROPERTY(CDTimerClass, RepairTimer); // for AI
-	DECLARE_PROPERTY(CDTimerClass, AlertTimer);
-	DECLARE_PROPERTY(CDTimerClass, BorrowedTime);
-	DECLARE_PROPERTY(CDTimerClass, PowerBlackoutTimer);
-	DECLARE_PROPERTY(CDTimerClass, RadarBlackoutTimer);
+	DECLARE_PROPERTY(TimerStruct, RepairTimer); // for AI
+	DECLARE_PROPERTY(TimerStruct, AlertTimer);
+	DECLARE_PROPERTY(TimerStruct, BorrowedTime);
+	DECLARE_PROPERTY(TimerStruct, PowerBlackoutTimer);
+	DECLARE_PROPERTY(TimerStruct, RadarBlackoutTimer);
 	bool                  Side2TechInfiltrated; // asswards! whether this player has infiltrated stuff
 	bool                  Side1TechInfiltrated; // which is listed in [AI]->BuildTech
 	bool                  Side0TechInfiltrated; // and has the appropriate AIBasePlanningSide
@@ -934,13 +919,13 @@ public:
 	DECLARE_PROPERTY(CounterClass, FactoryProducedInfantryTypes);
 	DECLARE_PROPERTY(CounterClass, FactoryProducedAircraftTypes);
 
-	DECLARE_PROPERTY(CDTimerClass, AttackTimer);
+	DECLARE_PROPERTY(TimerStruct, AttackTimer);
 	int                   InitialAttackDelay; // both unused
 	int                   EnemyHouseIndex;
 	DECLARE_PROPERTY(DynamicVectorClass<AngerStruct>, AngerNodes); //arghghghgh bugged
 	DECLARE_PROPERTY(DynamicVectorClass<ScoutStruct>, ScoutNodes); // filled with data which is never used, jood gob WW
-	DECLARE_PROPERTY(CDTimerClass, AITimer);
-	DECLARE_PROPERTY(CDTimerClass, Unknown_Timer_5640);
+	DECLARE_PROPERTY(TimerStruct, AITimer);
+	DECLARE_PROPERTY(TimerStruct, Unknown_Timer_5640);
 	int                   ProducingBuildingTypeIndex;
 	int                   ProducingUnitTypeIndex;
 	int                   ProducingInfantryTypeIndex;
@@ -965,13 +950,13 @@ public:
 	CellStruct			  NukeTarget;
 	IndexBitfield<HouseClass*> Allies;	//flags, one bit per HouseClass instance
 	                                        	//-> 32 players possible here
-	DECLARE_PROPERTY(CDTimerClass, DamageDelayTimer);
-	DECLARE_PROPERTY(CDTimerClass, TeamDelayTimer); // for AI attacks
-	DECLARE_PROPERTY(CDTimerClass, TriggerDelayTimer);
-	DECLARE_PROPERTY(CDTimerClass, SpeakAttackDelayTimer);
-	DECLARE_PROPERTY(CDTimerClass, SpeakPowerDelayTimer);
-	DECLARE_PROPERTY(CDTimerClass, SpeakMoneyDelayTimer);
-	DECLARE_PROPERTY(CDTimerClass, SpeakMaxedDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, DamageDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, TeamDelayTimer); // for AI attacks
+	DECLARE_PROPERTY(TimerStruct, TriggerDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, SpeakAttackDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, SpeakPowerDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, SpeakMoneyDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, SpeakMaxedDelayTimer);
 	IAIHouse*		      AIGeneral;
 
 	unsigned int          ThreatPosedEstimates[130][130]; // BLARGH

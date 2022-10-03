@@ -7,7 +7,7 @@
 #include <ObjectClass.h>
 #include <AnimTypeClass.h>
 #include <BounceClass.h>
-#include <StageClass.h>
+#include <ProgressTimer.h>
 
 //forward declarations
 class AnimTypeClass;
@@ -76,7 +76,7 @@ protected:
 
 public:
 
-	DECLARE_PROPERTY(StageClass, Animation);
+	DECLARE_PROPERTY(ProgressTimer, Animation);
 	AnimTypeClass* Type; //The AnimType.
 	ObjectClass * OwnerObject; // set by AnimClass::SetOwnerObject (0x424B50)
 	DWORD unknown_D0;
@@ -101,7 +101,7 @@ public:
 	BulletClass* AttachedBullet;
 	HouseClass* Owner; //Used for remap (AltPalette).
 	int LoopDelay; // randomized value, depending on RandomLoopDelay
-	double Accum; // Stores accumulated fractional animation damage and gets added to Type->Damage if at least 1.0 or above. Defaults to 1.0.
+	double Damage; // defaults to 1.0 , added to Type->Damage in some cases
 	BlitterFlags AnimFlags; // argument that's 0x600 most of the time
 	bool HasExtras; // enables IsMeteor and Bouncer special behavior (AnimExtras)
 	byte RemainingIterations; // defaulted to deleteAfterIterations, when reaches zero, UnInit() is called

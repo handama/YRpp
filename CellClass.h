@@ -181,14 +181,14 @@ public:
 	int GetFloorHeight(Point2D const& subcoords) const
 		{ JMP_THIS(0x47B3A0); }
 
-	// Factors in cell height from ramps, level etc.
-	CoordStruct* GetCellCoords(CoordStruct* pOutBuffer) const
+	// used by ambient waves and stuff
+	CoordStruct* GetCenterCoords(CoordStruct* pOutBuffer) const
 		{ JMP_THIS(0x480A30); }
 
-	CoordStruct GetCellCoords() const
+	CoordStruct GetCenterCoords() const
 	{
 		CoordStruct buffer;
-		GetCellCoords(&buffer);
+		GetCenterCoords(&buffer);
 		return buffer;
 	}
 

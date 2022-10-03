@@ -2,7 +2,6 @@
 
 #include <ArrayClasses.h>
 #include <GeneralDefinitions.h>
-#include <CCFileClass.h>
 #include <Helpers/CompileTime.h>
 
 struct TacticalSelectableStruct;
@@ -32,9 +31,7 @@ public:
 	static constexpr reference<bool, 0x8A0DEFu> const bAllowDirect3D{};
 	static constexpr reference<bool, 0x8A0DF0u> const bDirect3DIsUseable{};
 
-	static constexpr reference<bool, 0xA8E9A0u> const IsActive{};
-	static constexpr reference<bool, 0xA8ED80u> const IsFocused{};
-	static constexpr reference<int, 0xA8EDA0u> const SpecialDialog{};
+
 
 	// the game's own rounding function
 	// infamous for true'ing (F2I(-5.00) == -4.00)
@@ -94,9 +91,6 @@ public:
 
 	static double GetFloaterGravity()
 		{ JMP_STD(0x48ACF0); }
-
-	static void __fastcall KeyboardProcess(DWORD& input)
-		{ JMP_STD(0x55DEE0); }
 
 	static LARGE_INTEGER __fastcall AudioGetTime()
 		{ JMP_STD(0x4093B0); }
@@ -500,6 +494,7 @@ namespace Unsorted
 	static constexpr reference<bool, 0x822CF2> MoveFeedback {};
 
 	static constexpr reference<byte, 0xA8ED6B> ArmageddonMode {};
+	static constexpr reference<byte, 0xA8E9A0> WTFMode {};
 	static constexpr constant_ptr<DynamicVectorClass<ObjectClass*>, 0x8A0360> ObjectsInLayers {};
 
 // checkbox states, afaik

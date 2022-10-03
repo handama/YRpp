@@ -18,8 +18,6 @@ typedef unsigned long DWORD;
 #include <wchar.h>
 #include <cstdio>
 
-#include <Helpers/EnumFlags.h>
-
 //Avoid default CTOR trick
 #define DECLARE_PROPERTY(type,name)\
 union{\

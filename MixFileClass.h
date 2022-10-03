@@ -82,9 +82,6 @@ public:
 		MixFileClass*& mixfile, int& offset, int& length)
 	{ JMP_STD(0x5B4430); }
 
-	static void DestroyCache()
-	{ CALL(0x5B4310); }
-
 protected:
 	/*PROPERTY(MixFileClass*, Next);
 	MixFileClass* Prev;*/

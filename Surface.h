@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GeneralDefinitions.h>
+#include <GeneralStructures.h>
 #include <YRDDraw.h>
 #include <YRAllocator.h>
 
@@ -14,7 +14,7 @@ class NOVTABLE Surface
 public:
 	Surface() = default;
 
-	virtual ~Surface() RX;
+	virtual ~Surface() { PUSH_IMM(SDDTOR_NODELETE); THISCALL(0x4115D0); }
 
 	//Surface
 	virtual bool CopyFromWhole(Surface* pSrc, bool bUnk1, bool bUnk2) R0;
@@ -41,7 +41,7 @@ public:
 
 	virtual bool Fill(COLORREF nColor) R0;
 
-	virtual bool FillRectTrans(RectangleStruct* pClipRect, ColorStruct* pColor, int nOpacity) R0;
+	virtual bool FillRectTrans(RectangleStruct* pClipRect, ColorStruct Color, COLORREF nUnknown) R0;
 
 	virtual bool DrawEllipse(
 		int XOff, int YOff, int CenterX, int CenterY, RectangleStruct Rect, COLORREF nColor) R0;
@@ -146,9 +146,6 @@ public:
 	MemoryBuffer Buffer;
 };
 
-#pragma warning(push)
-#pragma warning( disable : 4505) // 'function' : unreferenced local function has been removed
-
 // Comments from thomassneddon
 static void __fastcall CC_Draw_Shape(Surface* Surface, ConvertClass* Palette, SHPStruct* SHP, int FrameIndex,
 	const Point2D* const Position, const RectangleStruct* const Bounds, BlitterFlags Flags,
@@ -174,8 +171,6 @@ static Point2D* Fancy_Text_Print_Wide(const Point2D& retBuffer, const wchar_t* T
 	JMP_STD(0x4A61C0);
 }
 
-#pragma warning(pop)
-
 
 //static Point2D* __fastcall Simple_Text_Print_Wide(Point2D* RetVal, const wchar_t* Text, Surface* Surface, RectangleStruct* Bounds,
 //	Point2D* Location, COLORREF ForeColor, COLORREF BackColor, TextPrintType Flag, bool bUkn)
@@ -186,17 +181,17 @@ static Point2D* Fancy_Text_Print_Wide(const Point2D& retBuffer, const wchar_t* T
 class NOVTABLE DSurface : public XSurface
 {
 public:
-	static constexpr reference<DSurface*, 0x8872FCu> const Tile {};
-	static constexpr reference<DSurface*, 0x887300u> const Sidebar {};
-	static constexpr reference<DSurface*, 0x887308u> const Primary {};
-	static constexpr reference<DSurface*, 0x88730Cu> const Hidden {};
-	static constexpr reference<DSurface*, 0x887310u> const Alternate {};
-	static constexpr reference<DSurface*, 0x887314u> const Temp {};
-	static constexpr reference<DSurface*, 0x88731Cu> const Composite {};
+	static constexpr reference<DSurface*, 0x8872FCu> const Tile{};
+	static constexpr reference<DSurface*, 0x887300u> const Sidebar{};
+	static constexpr reference<DSurface*, 0x887308u> const Primary{};
+	static constexpr reference<DSurface*, 0x88730Cu> const Hidden{};
+	static constexpr reference<DSurface*, 0x887310u> const Alternate{};
+	static constexpr reference<DSurface*, 0x887314u> const Temp{};
+	static constexpr reference<DSurface*, 0x88731Cu> const Composite{};
 
-	static constexpr reference<RectangleStruct, 0x886F90u> const SidebarBounds {};
-	static constexpr reference<RectangleStruct, 0x886FA0u> const ViewBounds {};
-	static constexpr reference<RectangleStruct, 0x886FB0u> const WindowBounds {};
+	static constexpr reference<RectangleStruct, 0x886F90u> const SidebarBounds{};
+	static constexpr reference<RectangleStruct, 0x886FA0u> const ViewBounds{};
+	static constexpr reference<RectangleStruct, 0x886FB0u> const WindowBounds{};
 
 	virtual bool DrawGradientLine(RectangleStruct* pRect, Point2D* pStart, Point2D* pEnd,
 		ColorStruct* pStartColor, ColorStruct* pEndColor, float fStep, int nColor) R0;

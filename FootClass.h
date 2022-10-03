@@ -35,9 +35,9 @@ public:
 	virtual void RemoveGunner(FootClass* Gunner) RX;
 	virtual bool IsLeavingMap() const R0;
 	virtual bool vt_entry_4E0() const R0;
-	virtual bool CanDeployNow() const R0;
-	virtual void AddSensorsAt(CellStruct cell) RX;
-	virtual void RemoveSensorsAt(CellStruct cell) RX;
+	virtual bool vt_entry_4E4() const R0;
+	virtual void vt_entry_4E8(CellStruct* pCell) RX;
+	virtual void vt_entry_4EC(CellStruct* pCell) RX;
 	virtual CoordStruct* vt_entry_4F0(CoordStruct* pCrd) R0;
 	virtual void vt_entry_4F4() RX;
 	virtual bool vt_entry_4F8() R0;
@@ -55,7 +55,7 @@ public:
 		VoxelStruct *VXL, int HVAFrameIndex, int Flags, IndexClass<int, int> *Cache, RectangleStruct *Rectangle,
 		Point2D *CenterPoint, Matrix3D *Matrix, DWORD dwUnk8, DWORD DrawFlags, DWORD dwUnk10) RX;
 
-	virtual void GoBerzerk() RX;
+	virtual void vt_entry_514() RX;
 	virtual void Panic() RX;
 	virtual void UnPanic() RX; //never
 	virtual void PlayIdleAnim(int nIdleAnimNumber) RX;
@@ -178,11 +178,11 @@ public:
 	FootClass*      NextTeamMember;        //next unit in team
 	DWORD           unknown_5DC;
 	int             PathDirections[24]; // list of directions to move in next, like tube directions
-	DECLARE_PROPERTY(CDTimerClass, PathDelayTimer);
+	DECLARE_PROPERTY(TimerStruct, PathDelayTimer);
 	int             unknown_int_64C;
-	DECLARE_PROPERTY(CDTimerClass, unknown_timer_650);
-	DECLARE_PROPERTY(CDTimerClass, SightTimer);
-	DECLARE_PROPERTY(CDTimerClass, BlockagePathTimer);
+	DECLARE_PROPERTY(TimerStruct, unknown_timer_650);
+	DECLARE_PROPERTY(TimerStruct, SightTimer);
+	DECLARE_PROPERTY(TimerStruct, BlockagePathTimer);
 	DECLARE_PROPERTY(YRComPtr<ILocomotion>, Locomotor);
 	CoordStruct       unknown_point3d_678;
 	signed char       TubeIndex;	//I'm in this tunnel
@@ -193,8 +193,8 @@ public:
 	bool              IsTeamLeader;
 	bool              ShouldScanForTarget;
 	bool              unknown_bool_68B;
-	bool              IsDeploying;
-	bool              IsFiring;
+	bool              unknown_bool_68C;
+	bool              unknown_bool_68D;
 	bool              unknown_bool_68E;
 	bool              ShouldEnterAbsorber; // orders the unit to enter the closest bio reactor
 	bool              ShouldEnterOccupiable; // orders the unit to enter the closest battle bunker
@@ -202,7 +202,7 @@ public:
 	FootClass*        ParasiteEatingMe; // the tdrone/squid that's eating me
 	DWORD             unknown_698;
 	ParasiteClass*    ParasiteImUsing;	// my parasitic half, nonzero for, eg, terror drone or squiddy
-	DECLARE_PROPERTY(CDTimerClass, ParalysisTimer); // for squid victims
+	DECLARE_PROPERTY(TimerStruct, ParalysisTimer); // for squid victims
 	bool              unknown_bool_6AC;
 	bool              IsAttackedByLocomotor; // the unit's locomotor is jammed by a magnetron
 	bool              IsLetGoByLocomotor; // a magnetron attacked this unit and let it go. falling, landing, or sitting on the ground

@@ -14,7 +14,7 @@
 #include <TemporalClass.h>
 #include <LaserDrawClass.h>
 #include <Helpers/Template.h>
-#include <StageClass.h>
+#include <ProgressTimer.h>
 #include <PlanningTokenClass.h>
 
 //forward declarations
@@ -189,14 +189,14 @@ public:
 	virtual bool ShouldNotBeCloaked() const R0;
 	virtual DirStruct* TurretFacing(DirStruct* pBuffer) const R0;
 	virtual bool IsArmed() const R0; // GetWeapon(primary) && GetWeapon(primary)->WeaponType
-	virtual bool vt_entry_2B0() const R0;
+	virtual void vt_entry_2B0() const RX;
 	virtual double GetStoragePercentage() const R0;
 	virtual int GetPipFillLevel() const R0;
 	virtual int GetRefund() const R0;
 	virtual int GetThreatValue() const R0;
 	virtual bool vt_entry_2C4(DWORD dwUnk) R0;
 	virtual DWORD vt_entry_2C8(DWORD dwUnk, DWORD dwUnk2) R0;
-	virtual bool CanReachLocation(const CoordStruct& coord) R0;
+	virtual bool vt_entry_2CC(DWORD dwUnk) R0;
 	virtual int GetCrewCount() const R0;
 	virtual int GetAntiAirValue() const R0;
 	virtual int GetAntiArmorValue() const R0;
@@ -206,8 +206,8 @@ public:
 	virtual int SelectNavalTargeting(AbstractClass *pTarget) const R0;
 	virtual int GetZAdjustment() const R0;
 	virtual ZGradient GetZGradient() const RT(ZGradient);
-	virtual CellStruct* GetSomeCellStruct(CellStruct* buffer) const R0;
-	virtual void SetSomeCellStruct(CellStruct coord) RX;
+	virtual CellStruct* GetSomeCellStruct() const R0;
+	virtual void SetSomeCellStruct(CellStruct* Buffer) RX;
 	virtual CellStruct* vt_entry_2FC(CellStruct* Buffer, DWORD dwUnk2, DWORD dwUnk3) const R0;
 	virtual CoordStruct * vt_entry_300(CoordStruct * Buffer, DWORD dwUnk2) const R0;
 	virtual DWORD vt_entry_304(DWORD dwUnk, DWORD dwUnk2) const R0;
@@ -292,7 +292,7 @@ public:
 	virtual void DrawActionLines(bool Force, DWORD dwUnk2) RX;
 	virtual DWORD GetDisguiseFlags(DWORD existingFlags) const R0;
 	virtual bool IsClearlyVisibleTo(HouseClass *House) const R0; // can House see right through my disguise?
-	virtual void DrawVoxel(const VoxelStruct& Voxel, DWORD dwUnk2, short Facing,
+	virtual void DrawVoxel(const VoxelStruct& Voxel, DWORD dwUnk2, short Facing, 
 		const IndexClass<int, int>& VoxelIndex, const RectangleStruct& Rect, const Point2D& Location,
 		const Matrix3D& Matrix, int Intensity, DWORD dwUnk9, DWORD dwUnk10) RX;
 	virtual void vt_entry_448(DWORD dwUnk, DWORD dwUnk2) RX;
@@ -433,9 +433,6 @@ public:
 	void SetTargetForPassengers(AbstractClass* pTarget)
 		{ JMP_THIS(0x710550); }
 
-	void KillPassengers(TechnoClass* pSource)
-		{ JMP_THIS(0x707CB0); }
-
 	// returns the house that created this object (factoring in Mind Control)
 	HouseClass * GetOriginalOwner()
 		{ JMP_THIS(0x70F820); }
@@ -448,9 +445,6 @@ public:
 
 	void ClearSidebarTabObject() const
 		{ JMP_THIS(0x734270); }
-
-	LightConvertClass* GetDrawer() const
-		{ JMP_THIS(0x705D70); }
 
 	int GetIonCannonValue(AIDifficulty difficulty) const;
 
@@ -492,7 +486,7 @@ protected:
 public:
 
 	DECLARE_PROPERTY(FlashData, Flashing);
-	DECLARE_PROPERTY(StageClass, Animation); // how the unit animates
+	DECLARE_PROPERTY(ProgressTimer, Animation); // how the unit animates
 	DECLARE_PROPERTY(PassengersClass, Passengers);
 	TechnoClass*     Transporter; // unit carrying me
 	int              unknown_int_120;
@@ -511,14 +505,14 @@ public:
 	PROTECTED_PROPERTY(DWORD, align_154);
 	double           ArmorMultiplier;
 	double           FirepowerMultiplier;
-	DECLARE_PROPERTY(CDTimerClass, IdleActionTimer); // MOO
-	DECLARE_PROPERTY(CDTimerClass, RadarFlashTimer);
-	DECLARE_PROPERTY(CDTimerClass, TargetingTimer); //Duration = 45 on init!
-	DECLARE_PROPERTY(CDTimerClass, IronCurtainTimer);
-	DECLARE_PROPERTY(CDTimerClass, IronTintTimer); // how often to alternate the effect color
+	DECLARE_PROPERTY(TimerStruct, IdleActionTimer); // MOO
+	DECLARE_PROPERTY(TimerStruct, RadarFlashTimer);
+	DECLARE_PROPERTY(TimerStruct, TargetingTimer); //Duration = 45 on init!
+	DECLARE_PROPERTY(TimerStruct, IronCurtainTimer);
+	DECLARE_PROPERTY(TimerStruct, IronTintTimer); // how often to alternate the effect color
 	int              IronTintStage; // ^
-	DECLARE_PROPERTY(CDTimerClass, AirstrikeTimer);
-	DECLARE_PROPERTY(CDTimerClass, AirstrikeTintTimer); // tracks alternation of the effect color
+	DECLARE_PROPERTY(TimerStruct, AirstrikeTimer);
+	DECLARE_PROPERTY(TimerStruct, AirstrikeTintTimer); // tracks alternation of the effect color
 	DWORD            AirstrikeTintStage; //  ^
 	int              ForceShielded;	//0 or 1, NOT a bool - is this under ForceShield as opposed to IC?
 	bool             Deactivated; //Robot Tanks without power for instance
@@ -527,10 +521,10 @@ public:
 	AnimClass*       DrainAnim;
 	bool             Disguised;
 	DWORD            DisguiseCreationFrame;
-	DECLARE_PROPERTY(CDTimerClass, InfantryBlinkTimer); // Rules->InfantryBlinkDisguiseTime , detects mirage firing per description
-	DECLARE_PROPERTY(CDTimerClass, DisguiseBlinkTimer); // disguise disruption timer
+	DECLARE_PROPERTY(TimerStruct, InfantryBlinkTimer); // Rules->InfantryBlinkDisguiseTime , detects mirage firing per description
+	DECLARE_PROPERTY(TimerStruct, DisguiseBlinkTimer); // disguise disruption timer
 	bool             UnlimboingInfantry;
-	DECLARE_PROPERTY(CDTimerClass, ReloadTimer);
+	DECLARE_PROPERTY(TimerStruct, ReloadTimer);
 	DWORD            unknown_208;
 	DWORD            unknown_20C;
 
@@ -541,8 +535,8 @@ public:
 	AbstractClass*   Focus; // when told to guard a unit or such; distinguish undeploy and selling
 	HouseClass*      Owner;
 	CloakState       CloakState;
-	DECLARE_PROPERTY(StageClass, CloakProgress); // phase from [opaque] -> [fading] -> [transparent] , [General]CloakingStages= long
-	DECLARE_PROPERTY(CDTimerClass, CloakDelayTimer); // delay before cloaking again
+	DECLARE_PROPERTY(ProgressTimer, CloakProgress); // phase from [opaque] -> [fading] -> [transparent] , [General]CloakingStages= long
+	DECLARE_PROPERTY(TimerStruct, CloakDelayTimer); // delay before cloaking again
 	float            WarpFactor; // don't ask! set to 0 in CTOR, never modified, only used as ((this->Fetch_ID) + this->WarpFactor) % 400 for something in cloak ripple
 	bool             unknown_bool_250;
 	CoordStruct      LastSightCoords;
@@ -591,8 +585,8 @@ public:
 	TechnoClass*     BunkerLinkedItem;
 
 	float            PitchAngle; // not exactly, and it doesn't affect the drawing, only internal state of a dropship
-	DECLARE_PROPERTY(CDTimerClass, DiskLaserTimer);
-	int           	 ROF;
+	DECLARE_PROPERTY(TimerStruct, DiskLaserTimer);
+	DWORD            unknown_2F8;
 	int              Ammo;
 	int              Value; // set to actual cost when this gets queued in factory, updated only in building's 42C
 
@@ -625,11 +619,11 @@ public:
 
 	DECLARE_PROPERTY(TransitionTimer, UnloadTimer); // times the deploy, unload, etc. cycles
 
-	DECLARE_PROPERTY(FacingClass, BarrelFacing);
-	DECLARE_PROPERTY(FacingClass, PrimaryFacing);
-	DECLARE_PROPERTY(FacingClass, SecondaryFacing);
+	DECLARE_PROPERTY(FacingStruct, BarrelFacing);
+	DECLARE_PROPERTY(FacingStruct, PrimaryFacing);
+	DECLARE_PROPERTY(FacingStruct, SecondaryFacing);
 	int              CurrentBurstIndex;
-	DECLARE_PROPERTY(CDTimerClass, TargetLaserTimer);
+	DECLARE_PROPERTY(TimerStruct, TargetLaserTimer);
 	short            unknown_short_3C8;
 	WORD             unknown_3CA;
 	bool             CountedAsOwned; // is this techno contained in OwningPlayer->Owned... counts?
@@ -646,8 +640,8 @@ public:
 	DECLARE_PROPERTY(RecoilData, BarrelRecoil);
 	bool             unknown_bool_418;
 	bool             unknown_bool_419;
-	bool             IsOwnedByCurrentPlayer; // Returns true if owned by the player on this computer
-	bool             DiscoveredByCurrentPlayer;
+	bool             IsHumanControlled;
+	bool             DiscoveredByPlayer;
 	bool             DiscoveredByComputer;
 	bool             unknown_bool_41D;
 	bool             unknown_bool_41E;

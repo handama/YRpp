@@ -5,6 +5,14 @@
 class NOVTABLE GaugeClass : public ControlClass
 {
 public:
+
+	//Destructor
+	virtual ~GaugeClass() RX;
+
+	//GadgetClass
+
+	//ControlClass
+
 	//GaugeClass
 	virtual bool SetMaximum(int value) R0;
 	virtual bool SetValue(int value) R0;

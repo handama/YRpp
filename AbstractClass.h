@@ -4,14 +4,13 @@
 #include <GeneralDefinitions.h>
 #include <GeneralStructures.h>
 #include <ArrayClasses.h>
-#include <IndexClass.h>
 
 #include <Helpers\CompileTime.h>
 
 //forward declarations
 class TechnoClass;
 class HouseClass;
-class CRCEngine;
+class Checksummer;
 
 struct StorageClass
 {
@@ -44,7 +43,6 @@ public:
 	static const AbstractType AbsID = AbstractType::Abstract;
 
 	static constexpr constant_ptr<DynamicVectorClass<AbstractClass*>, 0xB0F720u> const Array{};
-	static constexpr reference<IndexClass<int, int>, 0xB0E840u> const TargetIndex{};
 
 	//static
 	const char* GetClassName() const
@@ -100,7 +98,7 @@ public:
 	virtual void PointerExpired(AbstractClass* pAbstract, bool removed) RX;
 	virtual AbstractType WhatAmI() const = 0;
 	virtual int Size() const = 0;
-	virtual void ComputeCRC(CRCEngine& crc) const RX;
+	virtual void CalculateChecksum(Checksummer& checksum) const RX;
 	virtual int GetOwningHouseIndex() const R0;
 	virtual HouseClass* GetOwningHouse() const R0;
 	virtual int GetArrayIndex() const R0;
@@ -109,7 +107,7 @@ public:
 	virtual CoordStruct* GetDestination(CoordStruct* pCrd, TechnoClass* pDocker = nullptr) const R0; // where this is moving, or a building's dock for a techno. iow, a rendez-vous point
 	virtual bool IsOnFloor() const R0;
 	virtual bool IsInAir() const R0;
-	virtual CoordStruct* GetCenterCoords(CoordStruct* pCrd) const R0;
+	virtual CoordStruct* GetAltCoords(CoordStruct* pCrd) const R0;
 	virtual void Update() RX;
 
 	//non-virtual
@@ -134,9 +132,9 @@ public:
 		return ret;
 	}
 
-	CoordStruct GetCenterCoords() const {
+	CoordStruct GetAltCoords() const {
 		CoordStruct ret;
-		this->GetCenterCoords(&ret);
+		this->GetAltCoords(&ret);
 		return ret;
 	}
 

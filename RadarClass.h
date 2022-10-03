@@ -90,5 +90,5 @@ public:
 	DWORD unknown_14F4;
 	DWORD unknown_14F8;
 	DWORD unknown_14FC;
-	CDTimerClass unknown_timer_1500;
+	TimerStruct unknown_timer_1500;
 };

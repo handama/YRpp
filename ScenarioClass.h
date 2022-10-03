@@ -66,7 +66,6 @@ public:
 	//Static
 	static constexpr reference<ScenarioClass*, 0xA8B230u> const Instance{};
 	static constexpr reference<int, 0xA8ED7Cu> const NewINIFormat{};
-	static constexpr reference<TheaterType, 0x822CF8> const LastTheater{};
 
 
 	static void __fastcall UpdateCellLighting()
@@ -122,8 +121,8 @@ public:
 	Randomizer Random; //218
 	DWORD Difficulty1;
 	DWORD Difficulty2; // 2 - Difficulty1
-	CDTimerClass ElapsedTimer;
-	CDTimerClass PauseTimer;
+	TimerStruct ElapsedTimer;
+	TimerStruct PauseTimer;
 	DWORD unknown_62C;
 	bool IsGamePaused;
 	CellStruct Waypoints [702];
@@ -139,14 +138,14 @@ public:
 	CellStruct HouseHomeCells [0x8];
 	bool TeamsPresent;
 	int NumCoopHumanStartSpots;
-	CDTimerClass MissionTimer;
+	TimerStruct MissionTimer;
 	wchar_t * MissionTimerTextCSF;
 	char MissionTimerText [32];
-	CDTimerClass ShroudRegrowTimer;
-	CDTimerClass FogTimer;
-	CDTimerClass IceTimer;
-	CDTimerClass unknown_timer_123c;
-	CDTimerClass AmbientTimer;
+	TimerStruct ShroudRegrowTimer;
+	TimerStruct FogTimer;
+	TimerStruct IceTimer;
+	TimerStruct unknown_timer_123c;
+	TimerStruct AmbientTimer;
 	int TechLevel;
 	TheaterType Theater;
 	char FileName [0x104];
@@ -203,7 +202,7 @@ public:
 	bool MultiplayerOnly; //34BC
 	bool IsRandom;
 	bool PickedUpAnyCrate;
-	CDTimerClass unknown_timer_34C0;
+	TimerStruct unknown_timer_34C0;
 	int CampaignIndex;
 	int StartingDropships;
 	TypeList<TechnoTypeClass*> AllowableUnits;
@@ -233,8 +232,8 @@ public:
 	DWORD unknown_3598;
 	int InitTime;
 	short Stage;
-	bool UserInputLocked;
-	bool unknown_35A3;
+	bool unknown_35A2;
+	BYTE unknown_35A3;
 	int ParTimeEasy;
 	int ParTimeMedium;
 	int ParTimeDifficult;

@@ -197,8 +197,8 @@ public:
 	TypeList<int> DebrisMaximums;
 	_GUID           Locomotor;
 	DWORD align_35C;
-	double          VoxelScaleX;
-	double          VoxelScaleY;
+	double          unknown_double_360;
+	double          unknown_double_368;
 	double          Weight;
 	double          PhysicalSize;
 	double          Size;
@@ -286,8 +286,8 @@ public:
 	int             DetectDisguiseRange;
 	int             BombSight;
 	int             LeadershipRating;
-	NavalTargetingType NavalTargeting;
-	LandTargetingType LandTargeting;
+	NavalTargetingType             NavalTargeting;
+	LandTargetingType             LandTargeting;
 	float           BuildTimeMultiplier;
 	int             MindControlRingOffset;
 	int             Cost;

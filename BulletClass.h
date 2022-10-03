@@ -13,8 +13,8 @@ class WarheadTypeClass;
 
 struct BulletData
 {
-	CDTimerClass UnknownTimer;
-	CDTimerClass ArmTimer;
+	TimerStruct UnknownTimer;
+	TimerStruct ArmTimer;
 	CoordStruct Location;
 	int Distance;
 };

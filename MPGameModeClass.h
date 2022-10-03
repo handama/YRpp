@@ -14,7 +14,6 @@ NOTE:
 
 #include <GeneralDefinitions.h>
 #include <MPTeams.h>
-#include <Wstring.h>
 
 //forward declarations
 class HouseClass;
@@ -241,11 +240,11 @@ public:
 
 	bool unknown_4;
 	DynamicVectorClass<MPTeam *> MPTeams;
-	DECLARE_PROPERTY(WideWstring, CSFTitle);
-	DECLARE_PROPERTY(WideWstring, CSFTooltip);
+	wchar_t * CSFTitle;
+	wchar_t * CSFTooltip;
 	int MPModeIndex;
-	DECLARE_PROPERTY(Wstring, INIFilename);
-	DECLARE_PROPERTY(Wstring, MapFilter);
+	char* INIFilename;
+	char* MapFilter;
 	bool AIAllowed;
 	CCINIClass* INI;
 	bool AlliesAllowed;

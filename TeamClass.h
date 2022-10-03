@@ -35,8 +35,8 @@ public:
 		{ JMP_THIS(0x6EA870); }
 
 	// if bKeepQuantity is false, this will not change the quantity of each techno member
-	bool AddMember(FootClass* pFoot, bool bForce) 
-		{ JMP_THIS(0x6EA500); }
+	bool AddMember(FootClass* pFoot, bool bForce)
+	{ JMP_THIS(0x6EA500); }
 
 	//AbstractClass
 	virtual AbstractType WhatAmI() const RT(AbstractType);
@@ -71,8 +71,8 @@ public:
 	int            TotalThreatValue;
 	int            CreationFrame;
 	FootClass *    FirstUnit;
-	CDTimerClass   GuardAreaTimer;
-	CDTimerClass   SuspendTimer;
+	TimerStruct	   GuardAreaTimer;
+	TimerStruct	   SuspendTimer;
 	TagClass*      Tag;
 	bool           IsTransient;
 	bool           NeedsReGrouping;

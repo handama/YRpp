@@ -15,6 +15,16 @@ enum class ShapeButtonFlag : int
 class NOVTABLE ShapeButtonClass : public ToggleClass
 {
 public:
+
+	//Destructor
+	virtual ~ShapeButtonClass() RX;
+
+	//GadgetClass
+
+	//ControlClass
+
+	//ToggleClass
+
 	//ShapeButtonClass
 	virtual void SetShape(SHPStruct* pSHP, int Width, int Height) RX;
 

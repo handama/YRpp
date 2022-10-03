@@ -55,7 +55,7 @@ public:
 		int eventKind,
 		HouseClass *pHouse,
 		ObjectClass *Object,
-		CDTimerClass *ActivationFrame,
+		TimerStruct *ActivationFrame,
 		bool *isRepeating) const
 			{ JMP_THIS(0x71E940); }
 

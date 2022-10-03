@@ -5,6 +5,16 @@
 class NOVTABLE ToggleClass : public ControlClass
 {
 public:
+
+	//Destructor
+	virtual ~ToggleClass() RX;
+
+	//GadgetClass
+
+	//ControlClass
+
+	//ToggleClass
+
 	//Non virtual
 	void TurnOn() { JMP_THIS(0x723EA0); }
 	void TurnOff() { JMP_THIS(0x723EB0); }

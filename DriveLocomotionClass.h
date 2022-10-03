@@ -28,9 +28,9 @@ protected:
 
 public:
 
-	DWORD PreviousRamp;
-	DWORD CurrentRamp;
-	RateTimer SlopeTimer;
+	DWORD Ramp1;
+	DWORD Ramp2;
+	RepeatableTimerStruct SlopeTimer;
 	CoordStruct Destination;
 	CoordStruct HeadToCoord;
 	int SpeedAccum;
@@ -38,14 +38,13 @@ public:
 	DWORD TrackNumber;
 	int TrackIndex;
 	bool IsOnShortTrack;
-	BYTE IsTurretLockedDown;
+	BYTE field_61;
 	bool IsRotating;
 	bool IsDriving;
-	bool IsRocking;
+	bool can_crush_64;
 	bool IsLocked;
-	AbstractClass* Raider;
+	AbstractClass *Raider;
 	int field_6C;
 };
 
 static_assert(sizeof(DriveLocomotionClass) == 0x70);
-

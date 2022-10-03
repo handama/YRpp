@@ -20,7 +20,7 @@ public:
 	virtual void PointerExpired(AbstractClass* pAbstract, bool removed) RX;
 	virtual AbstractType WhatAmI() const RT(AbstractType);
 	virtual int Size() const R0;
-	virtual void ComputeCRC(CRCEngine& crc) const RX;
+	virtual void CalculateChecksum(Checksummer& checksum) const RX;
 
 	virtual int GetArrayIndex() const R0;
 

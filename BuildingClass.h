@@ -7,8 +7,7 @@
 #include <TechnoClass.h>
 #include <BuildingTypeClass.h>
 #include <BuildingLightClass.h>
-#include <StageClass.h>
-
+#include <ProgressTimer.h>
 class FactoryClass;
 class InfantryClass;
 class LightSourceClass;
@@ -52,19 +51,19 @@ public:
 	virtual bool ForceCreate(CoordStruct& coord, DWORD dwUnk = 0) R0;
 
 	//BuildingClass
-	virtual CellStruct FindExitCell(DWORD dwUnk, DWORD dwUnk2) const RT(CellStruct);
-	virtual int DistanceToDockingCoord(ObjectClass* pObj) const R0;
+	virtual CellStruct* FindExitCell(CellStruct* pCellStruct, DWORD dwUnk, DWORD dwUnk2) const R0;
+	virtual int vt_entry_4D8(ObjectClass* pObj) const R0;
 	virtual void Place(bool captured) RX;
 	virtual void UpdateConstructionOptions() RX;
-	virtual void Draw(const Point2D& point, const RectangleStruct& rect) RX;
-	virtual DirStruct FireAngleTo(ObjectClass* pObject) const RT(DirStruct);
-	virtual void Destory(DWORD dwUnused, TechnoClass* pTechno, bool NoSurvivor, CellStruct& cell) RX;
+	virtual void DrawFogged(const Point2D& point, const RectangleStruct& rect) RX;
+	virtual CellStruct* vt_entry_4E8(CellStruct* pCellStruct, DWORD dwUnk) const R0;
+	virtual void vt_entry_4EC(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) RX;
 	virtual bool TogglePrimaryFactory() R0;
 	virtual void SensorArrayActivate(CellStruct cell=CellStruct::Empty) RX;
 	virtual void SensorArrayDeactivate(CellStruct cell=CellStruct::Empty) RX;
 	virtual void DisguiseDetectorActivate(CellStruct cell=CellStruct::Empty) RX;
 	virtual void DisguiseDetectorDeactivate(CellStruct cell=CellStruct::Empty) RX;
-	virtual int AlwaysZero() R0;
+	virtual DWORD vt_entry_504() R0;
 
 	// non-vt
 
@@ -140,10 +139,6 @@ public:
 
 	void PlayAnim(const char* animName, BuildingAnimSlot Slot, bool Damaged, bool Garrisoned, int effectDelay = 0)
 		{ JMP_THIS(0x451890); }
-
-	// changes between building's damaged and undamaged animations.
-	void ToggleDamagedAnims(bool isDamaged)
-		{ JMP_THIS(0x451EE0); }
 
 	// when the building is switched off
 	void DisableStuff()
@@ -250,7 +245,7 @@ public:
 
 	BuildingTypeClass* Type;
 	FactoryClass* Factory;
-	CDTimerClass C4Timer;
+	TimerStruct C4Timer;
 	int BState;
 	int QueueBState;
 	DWORD OwnerCountryIndex;
@@ -258,7 +253,7 @@ public:
 	DWORD unknown_544;
 	AnimClass* FirestormAnim; //pointer
 	AnimClass* PsiWarnAnim; //pointer
-	CDTimerClass unknown_timer_550;
+	TimerStruct unknown_timer_550;
 
 // see eBuildingAnims above for slot index meanings
 	AnimClass * Anims [0x15];
@@ -277,11 +272,11 @@ public:
 	int FiringSWType; // type # of sw being launched
 	DWORD unknown_5FC;
 	BuildingLightClass* Spotlight;
-	RateTimer GateTimer;
+	RepeatableTimerStruct GateTimer;
 	LightSourceClass * LightSource; // tiled light , LightIntensity > 0
 	DWORD LaserFenceFrame; // 0-7 for active directionals, 8/12 for offline ones, check ntfnce.shp or whatever
 	DWORD FirestormWallFrame; // anim data for firestorm active animations
-	StageClass RepairProgress; // for hospital, armory, unitrepair etc
+	ProgressTimer RepairProgress; // for hospital, armory, unitrepair etc
 	RectangleStruct unknown_rect_63C;
 	CoordStruct unknown_coord_64C;
 	int unknown_int_658;
@@ -307,7 +302,7 @@ public:
 	bool BeingProduced;
 	bool ShouldRebuild;
 	bool HasEngineer; // used to pass the NeedsEngineer check
-	CDTimerClass CashProductionTimer;
+	TimerStruct CashProductionTimer;
 	bool unknown_bool_6DC;
 	bool IsReadyToCommence;
 	bool NeedsRepairs; // AI handholder for repair logic,
@@ -321,7 +316,7 @@ public:
 	bool IsDamaged; // AI handholder for repair logic,
 	bool IsFogged;
 	bool IsBeingRepaired; // show animooted repair wrench
-	bool HasBuildUp;
+	bool unknown_bool_6E9;
 	bool StuffEnabled; // status set by EnableStuff() and DisableStuff()
 	char HasCloakingData; // some fugly buffers
 	byte CloakRadius; // from Type->CloakRadiusInCells

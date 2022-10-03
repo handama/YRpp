@@ -5,6 +5,16 @@
 class NOVTABLE ColorListClass : public ListClass
 {
 public:
+
+	//Destructor
+	virtual ~ColorListClass() RX;
+
+	//GadgetClass
+
+	//ControlClass
+
+	//ListClass
+
 	//ColorListClass
 	virtual int AddItem(const char* lpStr, int color) R0;
 	virtual void SetSelectedStyle(int style, int color) RX;

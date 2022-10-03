@@ -69,6 +69,6 @@ public:
 	bool unknown_bool_35;
 	bool unknown_bool_36;
 	int State;
-	CDTimerClass Timer;
+	TimerStruct Timer;
 	ILocomotion* Piggybackee;
 };

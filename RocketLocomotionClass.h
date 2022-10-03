@@ -55,8 +55,8 @@ protected:
 public:
 
 	CoordStruct MovingDestination;
-	RateTimer MissionTimer;
-	CDTimerClass TrailerTimer;
+	RepeatableTimerStruct MissionTimer;
+	TimerStruct TrailerTimer;
 	int MissionState;
 	DWORD unknown_44;
 	double CurrentSpeed;

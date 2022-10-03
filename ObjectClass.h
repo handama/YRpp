@@ -50,7 +50,7 @@ public:
 	virtual bool IsSelectable() const R0;
 	virtual VisualType VisualCharacter(VARIANT_BOOL SpecificOwner, HouseClass * WhoIsAsking) const RT(VisualType);
 	virtual SHPStruct* GetImage() const R0;
-	virtual Action MouseOverCell(CellStruct const* pCell, bool checkFog = false, bool ignoreForce = false) const RT(Action);
+	virtual Action MouseOverCell(CellStruct const& cell, bool checkFog = false, bool ignoreForce = false) const RT(Action);
 	virtual Action MouseOverObject(ObjectClass const* pObject, bool ignoreForce = false) const RT(Action);
 	virtual Layer InWhichLayer() const RT(Layer);
 	virtual bool IsSurfaced() R0; // opposed to being submerged
@@ -90,11 +90,14 @@ public:
 	// can the current player control this unit? (owned by him, not paralyzed, not spawned, not warping, not slaved...)
 	virtual bool IsControllable() const R0;
 
-	// This does basically the same as GetCenterCoords().
-	virtual CoordStruct* GetCenterCoordsAlt(CoordStruct* pCrd) const R0;
+	// stupid! return this->GetCoords(pCrd);
+	virtual CoordStruct* GetPosition_0(CoordStruct* pCrd) const R0;
+
 	// gets a building's free dock coordinates for a unit. falls back to this->GetCoords(pCrd);
 	virtual CoordStruct* GetDockCoords(CoordStruct* pCrd, TechnoClass* docker) const R0;
-	virtual CoordStruct* GetRenderCoords(CoordStruct* pCrd) const R0;
+
+	// stupid! guess what happens again?
+	virtual CoordStruct* GetCenterCoord(CoordStruct* pCrd) const R0;
 	virtual CoordStruct* GetFLH(CoordStruct *pDest, int idxWeapon, CoordStruct BaseCoords) const R0;
 	virtual CoordStruct* GetExitCoords(CoordStruct* pCrd, DWORD dwUnk) const R0;
 	virtual int GetYSort() const R0;
@@ -109,7 +112,7 @@ public:
 	virtual bool Limbo() R0;
 
 	// place the object on the map
-	virtual bool Unlimbo(const CoordStruct& Crd, DirType dFaceDir) R0;
+	virtual bool Unlimbo(const CoordStruct& Crd, Direction::Value dFaceDir) R0;
 
 	// cleanup things (lose line trail, deselect, etc). Permanently: destroyed/removed/gone opposed to just going out of sight.
 	virtual void Disappear(bool permanently) RX;
@@ -130,7 +133,7 @@ public:
 	virtual CellStruct const* GetFoundationData(bool includeBib = false) const R0;
 	virtual void DrawBehind(Point2D* pLocation, RectangleStruct* pBounds) const RX;
 	virtual void DrawExtras(Point2D* pLocation, RectangleStruct* pBounds) const RX; // draws ivan bomb, health bar, talk bubble, etc
-	virtual void DrawIt(Point2D* pLocation, RectangleStruct* pBounds) const RX;
+	virtual void Draw(Point2D* pLocation, RectangleStruct* pBounds) const RX;
 	virtual void DrawAgain(const Point2D& location, const RectangleStruct& bounds) const RX; // just forwards the call to Draw
 	virtual void Undiscover() RX;
 	virtual void See(DWORD dwUnk, DWORD dwUnk2) RX;
@@ -141,8 +144,8 @@ public:
 	virtual void MarkForRedraw() RX;
 	virtual bool CanBeSelected() const R0;
 	virtual bool CanBeSelectedNow() const R0;
-	virtual bool CellClickedAction(Action action, CellStruct* pCell, CellStruct* pCell1, bool bUnk) R0;
-	virtual bool ObjectClickedAction(Action action, ObjectClass* pTarget, bool bUnk) R0;
+	virtual bool vt_entry_140(DWORD dwUnk, DWORD dwUnk2, DWORD dwUnk3, DWORD dwUnk4) R0;
+	virtual bool ClickedAction(Action Action, ObjectClass *Target, bool bUnk) R0;
 	virtual void Flash(int Duration) RX;
 	virtual bool Select() R0;
 	virtual void Deselect() RX;
@@ -236,12 +239,6 @@ public:
 	CellStruct GetMapCoordsAgain() const {
 		CellStruct ret;
 		this->GetMapCoordsAgain(&ret);
-		return ret;
-	}
-
-	CoordStruct GetRenderCoords() const {
-		CoordStruct ret;
-		this->GetRenderCoords(&ret);
 		return ret;
 	}
 

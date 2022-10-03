@@ -8,6 +8,14 @@
 class NOVTABLE ListClass : public ControlClass
 {
 public:
+
+	//Destructor
+	virtual ~ListClass() RX;
+
+	//GadgetClass
+
+	//ControlClass
+
 	//ListClass
 	virtual int AddItem(const char* lpStr) R0;
 	virtual bool EnableScrollBar() R0;
